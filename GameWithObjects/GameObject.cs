@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,7 +20,7 @@ namespace GameWithObjects
             Sprite = sprite;
         }
 
-        public void Move(int dx, int dy, int maxX, int maxY)
+        public virtual void Move(int dx, int dy, int maxX, int maxY)
         {
             int newX = X + dx;
             int newY = Y + dy;
@@ -34,11 +35,39 @@ namespace GameWithObjects
             }
         }
 
-        public void Draw()
+        public virtual void Draw()
         {
             Console.SetCursorPosition(X, Y);
             Console.Write(Sprite);
         }
 
     }
+
+    class Enemy : GameObject
+    {
+        public int Speed { get; private set; }
+        private int frameCounter;
+
+        public Enemy(int x, int y, string sprite, int speed) : base(x,y,sprite)
+        {
+            Speed = speed;
+            frameCounter = 0;
+        }
+
+
+        public void Update(GameObject target, int maxX, int maxY)
+        {
+            frameCounter++;
+            if (frameCounter % Speed == 0) // % looks at the decimal number.
+            {
+                int dx = target.X > X ? 1 : target.X < X ? -1 : 0;
+                int dy = target.Y > Y ? 1 : target.Y < Y ? -1 : 0;
+                Move(dx, dy, maxX, maxY);
+                frameCounter = 0;
+            }
+        }
+
+
+    }
+
 }

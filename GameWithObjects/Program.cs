@@ -3,7 +3,7 @@
     internal class Program
     {
         static GameObject player;
-        static GameObject enemy;
+        static Enemy enemy;
 
         static Random random = new Random();
         static bool isRunning = true;
@@ -14,7 +14,6 @@
         static int windowWidth = 40;
         static int windowHeight = 20;
 
-        static int enemyMoveCounter = 0;
 
         static void Main(string[] args)
         {
@@ -22,7 +21,7 @@
             Console.CursorVisible = false;
 
             player = new GameObject(0, 0, "@");
-            enemy = new GameObject(10, 10, "X");
+            enemy = new Enemy(10, 10, "X", 4);
             
 
 
@@ -69,15 +68,8 @@
                 }
             }
 
-            enemyMoveCounter++;
-            if (enemyMoveCounter % 3 == 0) // % looks at the decimal number.
-            {
-                int dx = player.X > enemy.X ? 1 : player.X < enemy.X ? -1 : 0;
-                int dy = player.Y > enemy.Y ? 1 : player.Y < enemy.Y ? -1 : 0;
-                enemy.Move(dx, dy, windowWidth, windowHeight);
-                enemyMoveCounter = 0;
-            }
-            
+
+            enemy.Update(player, windowWidth, windowHeight);
         }
         static void Draw()
         {
