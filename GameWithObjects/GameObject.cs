@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -65,6 +66,57 @@ namespace GameWithObjects
                 Move(dx, dy, maxX, maxY);
                 frameCounter = 0;
             }
+        }
+        public override void Draw()
+        {
+            Console.SetCursorPosition(X, Y);
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write(Sprite);
+            Console.ResetColor();
+        }
+
+    }
+
+    class Player : GameObject
+    {
+        public int HP { get; private set; }
+        public Player(int x, int y, string sprite, int hp) : base( x , y , sprite)
+        {
+            HP = hp;
+        } 
+
+        public void CheckCollisionWith(GameObject other)
+        {
+            if(X == other.X && Y == other.Y)
+            {
+
+                HP -= 1;
+            }
+        }
+
+        public override void Draw()
+        {
+            Console.SetCursorPosition(X, Y);
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write(Sprite);
+            Console.ResetColor();
+        }
+
+    }
+
+    class Coin : GameObject
+    {
+        public Coin(int x, int y, string sprite) : base(x, y, sprite)
+        {
+
+        }
+
+        public override void Draw()
+        {
+            Console.SetCursorPosition(X, Y);
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write(Sprite);
+            Console.ResetColor();
         }
 
 
