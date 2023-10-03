@@ -14,6 +14,9 @@
         static double deltaTime;
         static double gameTimeElapsed;
 
+        static int windowWidth = 40;
+        static int windowHeight = 20;
+
         static bool enemyMoveToggle = false;
 
         static void Main(string[] args)
@@ -62,16 +65,16 @@
                         isRunning = false;
                         break;
                     case ConsoleKey.UpArrow:
-                        playerY--;
+                        if (playerY > 0) playerY--;
                         break;
                     case ConsoleKey.DownArrow:
-                        playerY++;
+                        if (playerY < windowHeight) playerY++;
                         break;
                     case ConsoleKey.LeftArrow:
-                        playerX--;
+                        if (playerX > 0) playerX--;
                         break;
                     case ConsoleKey.RightArrow:
-                        playerX++;
+                        if (playerX < windowWidth) playerX++;
                         break;
                     default:
                         break;
@@ -80,11 +83,11 @@
 
             if (enemyMoveToggle)
             {
-                if (enemyX < playerX) enemyX++;
-                else if (enemyX > playerX) enemyX--;
+                if (enemyX < playerX && enemyX < windowWidth -1) enemyX++;
+                else if (enemyX > playerX && enemyX > 0) enemyX--;
 
-                if (enemyY < playerY) enemyY++;
-                else if (enemyY > playerY) enemyY--;
+                if (enemyY < playerY && enemyX < windowHeight -1) enemyY++;
+                else if (enemyY > playerY && enemyY > 0) enemyY--;
             }
             enemyMoveToggle = !enemyMoveToggle;
         }
