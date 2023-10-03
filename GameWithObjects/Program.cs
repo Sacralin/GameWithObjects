@@ -2,11 +2,8 @@
 {
     internal class Program
     {
-        static int playerX = 0;
-        static int playerY = 0;
-        static int enemyX = 0;
-        static int enemyY = 0;
-
+        static GameObject player;
+        static GameObject enemy;
 
         static Random random = new Random();
         static bool isRunning = true;
@@ -17,15 +14,16 @@
         static int windowWidth = 40;
         static int windowHeight = 20;
 
-        static bool enemyMoveToggle = false;
+        static int enemyMoveCounter = 0;
 
         static void Main(string[] args)
         {
             Console.BufferHeight = Console.WindowHeight * 2;
             Console.CursorVisible = false;
 
-            PlacePlayer(0, 0);
-            PlaceEnemy(10, 10);
+            player = new GameObject(0, 0, "@");
+            enemy = new GameObject(10, 10, "X");
+            
 
 
             while (isRunning)
@@ -41,17 +39,7 @@
             }
         }
 
-        private static void PlaceEnemy(int x, int y)
-        {
-            enemyX = x;
-            enemyY = y;
-        }
-
-        private static void PlacePlayer(int x, int y)
-        {
-            playerX = x;
-            playerY = y;
-        }
+        
 
         static void Update()
         {
@@ -65,42 +53,40 @@
                         isRunning = false;
                         break;
                     case ConsoleKey.UpArrow:
-                        if (playerY > 0) playerY--;
+                        player.Move(0,-1, windowWidth, windowHeight);
                         break;
                     case ConsoleKey.DownArrow:
-                        if (playerY < windowHeight) playerY++;
+                        player.Move(0, 1, windowWidth, windowHeight); 
                         break;
                     case ConsoleKey.LeftArrow:
-                        if (playerX > 0) playerX--;
+                        player.Move(-1, 0, windowWidth, windowHeight); 
                         break;
                     case ConsoleKey.RightArrow:
-                        if (playerX < windowWidth) playerX++;
+                        player.Move(1, 0, windowWidth, windowHeight); 
                         break;
                     default:
                         break;
                 }
             }
 
-            if (enemyMoveToggle)
+            enemyMoveCounter++;
+            if (enemyMoveCounter % 3 == 0) // % looks at the decimal number.
             {
-                if (enemyX < playerX && enemyX < windowWidth -1) enemyX++;
-                else if (enemyX > playerX && enemyX > 0) enemyX--;
-
-                if (enemyY < playerY && enemyX < windowHeight -1) enemyY++;
-                else if (enemyY > playerY && enemyY > 0) enemyY--;
+                int dx = player.X > enemy.X ? 1 : player.X < enemy.X ? -1 : 0;
+                int dy = player.Y > enemy.Y ? 1 : player.Y < enemy.Y ? -1 : 0;
+                enemy.Move(dx, dy, windowWidth, windowHeight);
+                enemyMoveCounter = 0;
             }
-            enemyMoveToggle = !enemyMoveToggle;
+            
         }
         static void Draw()
         {
             Console.Clear();
 
-            Console.SetCursorPosition(playerX,playerY);
-            Console.Write("@");
+            player.Draw();
+            enemy.Draw();
 
-            Console.SetCursorPosition(enemyX, enemyY);
-            Console.Write("X");
-
+            
             Console.SetCursorPosition(0, 21);
             Console.WriteLine($"Time elapsed (ms): {Math.Round(gameTimeElapsed /1000)}");
         }
