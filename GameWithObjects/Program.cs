@@ -14,12 +14,14 @@ namespace GameWithObjects
         static DateTime lastUpdateTime = DateTime.Now;
         static double deltaTime;
         static double gameTimeElapsed;
+        static double enemyTimeElapsed;
 
         static int windowWidth = 40;
         static int windowHeight = 20;
-        private static int numberOfEnemies = 5;
+        private static int numberOfEnemies = 2;
         static int coinsCollected = 0;
-        static int maxCoins = 5;
+        static int maxCoins = 10;
+        static double enemySpawnTimer = 5000;
 
         static void Main(string[] args)
         {
@@ -56,6 +58,7 @@ namespace GameWithObjects
                 deltaTime = (currentTime - lastUpdateTime).TotalMilliseconds;
                 lastUpdateTime = currentTime;
                 gameTimeElapsed += deltaTime;
+                enemyTimeElapsed += deltaTime;
                 Update();
                 Draw();
                 Thread.Sleep(100); // 100 milliseconds delay
@@ -72,6 +75,7 @@ namespace GameWithObjects
                 ConsoleKeyInfo keyInfo = Console.ReadKey(true);
                 switch (keyInfo.Key)
                 {
+                    
                     case ConsoleKey.Q:
                         isRunning = false;
                         break;
@@ -108,6 +112,16 @@ namespace GameWithObjects
                     
                 }
             }
+
+            if(enemyTimeElapsed >= enemySpawnTimer)
+            {
+                int speed = random.Next(2, 7);
+                int x = random.Next(0, windowWidth);
+                int y = random.Next(0, windowHeight);
+                enemies.Add(new Enemy(x, y, "X", speed));
+                enemyTimeElapsed = 0;
+            }
+
             
         }
         static void Draw()
